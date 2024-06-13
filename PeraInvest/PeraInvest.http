@@ -1,0 +1,6 @@
+@PeraInvest_HostAddress = http://localhost:5100
+
+POST {{PeraInvest_HostAddress}}/usuarios/
+Accept: application/json
+
+###
