@@ -1,14 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using PeraInvest.Domain.models;
 
 namespace PeraInvest.Adapters.Persistence.Context {
     public class UsuarioContext : DbContext {
 
-        static readonly string connectionString = "Server=localhost:3306;User ID=YOURUSERID;Password=YOURPASSWORD;Database=perainvest";
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
-            optionsBuilder.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
-        }
+        public UsuarioContext(DbContextOptions<UsuarioContext> options)
+        : base(options) { }
 
         public DbSet<Usuario> Usuarios { get; set; }
     }

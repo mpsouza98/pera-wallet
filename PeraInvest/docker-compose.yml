@@ -9,6 +9,8 @@ services:
       - "3306:3306"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 'true'
+      MYSQL_USER: perauser
+      MYSQL_PASSWORD: perapass
     volumes:
       - ./docker-volumes/mysql:/var/lib/mysql
       - ./docker-volumes/mysql-conf:/etc/mysql/conf.d
