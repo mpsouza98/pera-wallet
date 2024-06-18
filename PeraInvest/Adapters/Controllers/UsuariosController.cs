@@ -19,7 +19,7 @@ namespace PeraInvest.Adapters.Controllers {
         public Usuario PostUsuario() {
             log.LogInformation("Requisição");
 
-            var usuario = new Usuario{ id = 1, email = "matheus@gmail.com", senha = "senhabosta"};
+            var usuario = new Usuario{ id = 2, email = "matheus@gmail.com", senha = "senhabosta"};
             context.Usuarios.Add(usuario);
             context.SaveChanges();
             
