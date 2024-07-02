@@ -3,4 +3,6 @@
 POST {{PeraInvest_HostAddress}}/usuarios/
 Accept: application/json
 
+GET {{PeraInvest_HostAddress}}/usuarios/
+Accept: application/json
 ###

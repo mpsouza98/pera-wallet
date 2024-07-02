@@ -1,17 +1,23 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using PeraInvest.Domain.models;
+﻿//using Microsoft.EntityFrameworkCore;
+//using NUlid;
+//using PeraInvest.Domain.models;
+//using System.Xml;
 
-namespace PeraInvest.Adapters.Persistence.Context {
-    public class UsuarioContext : DbContext {
+//namespace PeraInvest.Adapters.Persistence.Context {
+//    public class UsuarioContext : DbContext {
 
-        public UsuarioContext(DbContextOptions<UsuarioContext> options)
-        : base(options) { }
+//        public UsuarioContext(DbContextOptions<UsuarioContext> options)
+//        : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder) {
-            modelBuilder.Entity<Usuario>();
-        }
+//        protected override void OnModelCreating(ModelBuilder modelBuilder) {
+//            base.OnModelCreating(modelBuilder);
 
-        public DbSet<Usuario> Usuarios { get; set; }
-    }
-}
+//            modelBuilder.Entity<Usuario>()
+//                .Property(e => e.id)
+//                .IsRequired()
+//                .HasMaxLength(26);
+//        }
+
+//        public DbSet<Usuario> Usuarios { get; set; }
+//    }
+//}

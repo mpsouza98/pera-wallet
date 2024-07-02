@@ -1,17 +1,30 @@
 version: '3.1'
 
 services:
-  db:
-    image: mysql
-    restart: always
-    container_name: pera-invest-mysql
-    ports:
-      - "3306:3306"
-    environment:
-      MYSQL_USER: perauser
-      MYSQL_PASSWORD: perapass
-      MYSQL_ROOT_PASSWORD: example
-    volumes:
-      - ./docker-volumes/mysql:/var/lib/mysql
-      - ./docker-volumes/mysql-conf:/etc/mysql/conf.d
-      - ./Sql:/docker-entrypoint-initdb.d
+    perainvestdb:
+        image: mysql
+        restart: always
+        container_name: pera-invest-mysql
+        ports:
+            - "3306:3306"
+        environment:
+            MYSQL_USER: perauser
+            MYSQL_PASSWORD: perapass
+            MYSQL_ROOT_PASSWORD: example
+        volumes:
+          - ./docker-volumes/mysql:/var/lib/mysql
+          - ./docker-volumes/mysql-conf:/etc/mysql/conf.d
+          - ./Sql:/docker-entrypoint-initdb.d
+    keycloak:
+        image: quay.io/keycloak/keycloak
+        restart: always
+        container_name: keycloak
+        command: start-dev
+        ports:
+            - "18080:8080"
+        environment:
+            KEYCLOAK_ADMIN: admin
+            KEYCLOAK_ADMIN_PASSWORD: admin
+
+  
+  
