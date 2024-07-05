@@ -8,6 +8,6 @@ namespace PeraInvest.Adapters.Persistence.Context {
 
         }
 
-        public DbSet<AtivosFinanceiros> AtivosFinanceiros { get; set; }
+        //public DbSet<AtivoFinanceiro> AtivosFinanceiros { get; set; }
     }
 }
