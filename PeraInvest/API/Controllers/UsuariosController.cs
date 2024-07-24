@@ -1,10 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
-using NUlid;
-using PeraInvest.Adapters.Clients;
-using PeraInvest.Adapters.Persistence.Context;
-using PeraInvest.Domain.models;
+using PeraInvest.API.Clients;
 
-namespace PeraInvest.Adapters.Controllers {
+namespace PeraInvest.API.Controllers {
     [ApiController]
     [Route("[controller]")]
     public class UsuariosController : ControllerBase {
@@ -21,7 +18,7 @@ namespace PeraInvest.Adapters.Controllers {
         //public Usuario PostUsuario() {
         //    log.LogInformation("Requisição");
 
-        //    var usuario = new Usuario { id = Ulid.NewUlid().ToString(), email = "matheus@gmail.com", senha = "senhabosta" }; 
+        //var usuario = new Usuario { id = Ulid.NewUlid().ToString(), email = "matheus@gmail.com", senha = "senhabosta" }; 
         //    //context.Usuarios.Add(usuario);
         //    context.SaveChanges();
 

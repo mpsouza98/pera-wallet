@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace PeraInvest.Adapters.Clients.auth {
+namespace PeraInvest.API.Clients.auth {
 
     public interface IAuthTokenClient {
         Task<AccessToken> GenerateToken();
@@ -16,7 +16,7 @@ namespace PeraInvest.Adapters.Clients.auth {
         public AuthTokenClient(HttpClient httpClient, ClientCredentialsTokenRequest tokenRequest, ILogger<AuthTokenClient> log) {
             client = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
             this.tokenRequest = tokenRequest ?? throw new ArgumentNullException(nameof(tokenRequest));
-            this.logger = log ?? throw new ArgumentNullException(nameof(log));
+            logger = log ?? throw new ArgumentNullException(nameof(log));
         }
 
         public async Task<AccessToken> GenerateToken() {
@@ -46,15 +46,15 @@ namespace PeraInvest.Adapters.Clients.auth {
     }
 
     public record ClientCredentialsTokenRequest(
-        String url,
-        String clientId,
-        String clientSecret,
-        String grantType
+        string url,
+        string clientId,
+        string clientSecret,
+        string grantType
     );
 
     public class AccessToken {
         [JsonPropertyName("access_token")]
-        public String token { get; set; }
+        public string token { get; set; }
 
         [JsonPropertyName("expires_in")]
         public int expiresIn { get; set; }
@@ -63,12 +63,12 @@ namespace PeraInvest.Adapters.Clients.auth {
         public int refreshExpiresIn { get; set; }
 
         [JsonPropertyName("token_type")]
-        public String tokenType { get; set; }
+        public string tokenType { get; set; }
 
         [JsonPropertyName("not-before-policy")]
         public int notBeforePolicy { get; set; }
 
         [JsonPropertyName("scope")]
-        public String scope { get; set; }
+        public string scope { get; set; }
     }
 }

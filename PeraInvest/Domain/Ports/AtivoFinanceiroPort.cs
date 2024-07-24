@@ -1,7 +1,11 @@
-﻿using PeraInvest.Domain.models;
+﻿
+using PeraInvest.Domain.CarteiraAggregate;
 
 namespace PeraInvest.Domain.Ports {
     interface AtivoFinanceiroPort {
-        void CriarAtivoFinanceiro(AtivoFinanceiro ativoFinanceiro);
+        AtivoFinanceiro CriarAtivoFinanceiro(AtivoFinanceiro ativoFinanceiro);
+        AtivoFinanceiro ObterAtivoFinanceiro(string id);
+        AtivoFinanceiro AtualizarAtivoFinanceiro(AtivoFinanceiro ativoFinanceiro);
+        void DeletarAtivoFinanceiro(string id);
     }
 }

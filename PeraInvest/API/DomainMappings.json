@@ -1,0 +1,20 @@
+{
+  "data": {
+    "carteiraId": 123,
+    "totalInvestido": 36000.00,
+    "rendimentoTotal": 1326.08,
+    "rentabilidadeTotal": 3.68,
+    "valorizacaoPeriodo": [
+      {
+        "dataRendimento": "15/07/2024",
+        "rendimentoAcumulado": 600.43,
+        "rentabilidade": 3.07
+      },
+      {
+        "dataRendimento": "16/07/2024",
+        "rendimentoAcumulado": 625.43,
+        "rentabilidade": 3.12
+      }
+    ]
+  }
+}

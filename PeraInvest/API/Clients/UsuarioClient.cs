@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace PeraInvest.Adapters.Clients {
+namespace PeraInvest.API.Clients {
 
     public interface IUsuarioClient {
         Task<Usuario> getUser();

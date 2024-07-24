@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Caching.Memory;
 
-namespace PeraInvest.Adapters.Clients.auth {
+namespace PeraInvest.API.Clients.auth {
     public class AuthTokenHandler : DelegatingHandler {
 
         private readonly AuthTokenClient authClient;
@@ -9,7 +9,7 @@ namespace PeraInvest.Adapters.Clients.auth {
         private readonly ILogger<AuthTokenHandler> log;
 
         public AuthTokenHandler(AuthTokenClient client, ClientCredentialsTokenRequest tokenRequest, IMemoryCache cache, ILogger<AuthTokenHandler> log) {
-            this.authClient = client ?? throw new ArgumentNullException(nameof(client));
+            authClient = client ?? throw new ArgumentNullException(nameof(client));
             this.tokenRequest = tokenRequest ?? throw new ArgumentNullException(nameof(tokenRequest));
             this.cache = cache ?? throw new ArgumentNullException(nameof(cache));
             this.log = log ?? throw new ArgumentNullException(nameof(log));
@@ -18,7 +18,7 @@ namespace PeraInvest.Adapters.Clients.auth {
 
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken) {
-            String cacheKey = tokenRequest.clientId;
+            string cacheKey = tokenRequest.clientId;
 
             if (cache.TryGetValue(cacheKey, out var cachedAccessToken)) {
                 log.LogInformation("Using cached access token");
@@ -27,7 +27,7 @@ namespace PeraInvest.Adapters.Clients.auth {
             AccessToken accessToken = cachedAccessToken as AccessToken ?? GenerateAccessToken(request);
 
             request.Headers.Add("Authorization", $"Bearer {accessToken?.token}");
-            
+
             return await base.SendAsync(request, cancellationToken);
 
         }
