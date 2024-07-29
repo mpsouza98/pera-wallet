@@ -1,8 +1,13 @@
 @PeraInvest_HostAddress = http://localhost:5100
 
-POST {{PeraInvest_HostAddress}}/usuarios/
+POST {{PeraInvest_HostAddress}}/api/usuarios/
 Accept: application/json
 
-GET {{PeraInvest_HostAddress}}/usuarios/
+GET {{PeraInvest_HostAddress}}/api/usuarios/
 Accept: application/json
-###
+
+POST {{PeraInvest_HostAddress}}/api/carteiras/
+Accept: application/json
+
+GET {{PeraInvest_HostAddress}}/api/carteiras/
+Accept: application/json

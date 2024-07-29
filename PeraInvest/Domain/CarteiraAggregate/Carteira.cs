@@ -1,5 +1,7 @@
-﻿namespace PeraInvest.Domain.CarteiraAggregate {
-    public class Carteira {
+﻿using PeraInvest.Domain.SeedWork;
+
+namespace PeraInvest.Domain.CarteiraAggregate {
+    public class Carteira: IAggregateRoot {
         public string Id { get; }
         public string UsuarioId { get; set; }
         public DateTime CriadoEm { get; set; }

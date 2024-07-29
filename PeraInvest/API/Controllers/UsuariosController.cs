@@ -16,13 +16,7 @@ namespace PeraInvest.API.Controllers {
 
         //[HttpPost(Name = "PostUsuario")]
         //public Usuario PostUsuario() {
-        //    log.LogInformation("Requisição");
-
-        //var usuario = new Usuario { id = Ulid.NewUlid().ToString(), email = "matheus@gmail.com", senha = "senhabosta" }; 
-        //    //context.Usuarios.Add(usuario);
-        //    context.SaveChanges();
-
-        //    return usuario;
+            
         //}
 
         [HttpGet(Name = "GetUsuario")]

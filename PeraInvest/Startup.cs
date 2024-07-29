@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PeraInvest.API.Clients;
 using PeraInvest.API.Clients.auth;
+using PeraInvest.Infrastructure;
 
 namespace PeraInvest {
     public class Startup {
@@ -16,8 +17,8 @@ namespace PeraInvest {
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
             services.AddMemoryCache();
-            //services.AddDbContext<CarteiraContext>(
-                //options => options.UseMySQL(connectionString: connectionString!));
+            services.AddDbContext<CarteiraContext>(options => options.UseMySQL(connectionString: connectionString!));
+            services.AddDbContext<AtivoFinanceiroContext>(options => options.UseMySQL(connectionString: connectionString!));
 
             services.AddSingleton(new ClientCredentialsTokenRequest(
                 url: Configuration["Authentication:GenerateTokenUrl"] ?? throw new NullReferenceException(),

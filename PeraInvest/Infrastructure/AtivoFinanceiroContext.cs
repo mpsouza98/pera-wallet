@@ -1,13 +1,18 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 using PeraInvest.Domain.CarteiraAggregate;
 using PeraInvest.Domain.SeedWork;
 
 namespace PeraInvest.Infrastructure;
 
-public partial class CarteiraContext : DbContext, IUnitOfWork {
+public partial class AtivoFinanceiroContext : DbContext, IUnitOfWork {
+    private readonly IMediator _mediator;
 
-    public CarteiraContext(DbContextOptions<CarteiraContext> options)
+    public AtivoFinanceiroContext(DbContextOptions<AtivoFinanceiroContext> options, IMediator mediator)
         : base(options) {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+
+        //System.Diagnostics.Debug.WriteLine("AtivoFinanceiroContext::ctor ->" + this.GetHashCode());
     }
 
     public virtual DbSet<AtivoFinanceiro> AtivosFinanceiro { get; set; }
@@ -46,6 +51,7 @@ public partial class CarteiraContext : DbContext, IUnitOfWork {
             entity.Property(e => e.Status).HasColumnName("status");
         });
     }
+
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken)) {
         // Dispatch Domain Events collection. 
         // Choices:
