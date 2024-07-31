@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PeraInvest.API.Clients;
 using PeraInvest.API.Clients.auth;
+using PeraInvest.Domain.CarteiraAggregate.Repository;
 using PeraInvest.Infrastructure;
+using PeraInvest.Infrastructure.Repositories;
 
 namespace PeraInvest {
     public class Startup {
@@ -40,6 +42,10 @@ namespace PeraInvest {
             });
 
             services.AddControllers();
+
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
+
+            services.AddScoped<IAtivoFinanceiroRepository, AtivoFinanceiroRepository>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

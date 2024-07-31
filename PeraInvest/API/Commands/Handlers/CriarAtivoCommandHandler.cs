@@ -4,17 +4,15 @@ using PeraInvest.Domain.CarteiraAggregate.Repository;
 
 namespace PeraInvest.API.Commands.Handlers {
     public class CriarAtivoCommandHandler : IRequestHandler<CriarAtivoCommand, AtivoFinanceiro> {
-        private readonly IAtivoFinanceiroRepository _ativoFinanceiroRepository;
-        private readonly IMediator _mediator;
-        private readonly ILogger<CriarAtivoCommandHandler> _logger;
+        private readonly IAtivoFinanceiroRepository ativoFinanceiroRepository;
+        private readonly ILogger<CriarAtivoCommandHandler> logger;
 
-        public CriarAtivoCommandHandler(IAtivoFinanceiroRepository ativoFinanceiroRepository, IMediator mediator, ILogger<CriarAtivoCommandHandler> logger) {
-            _ativoFinanceiroRepository = ativoFinanceiroRepository ?? throw new ArgumentNullException(nameof(ativoFinanceiroRepository));
-            _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+        public CriarAtivoCommandHandler(IAtivoFinanceiroRepository ativoFinanceiroRepository, ILogger<CriarAtivoCommandHandler> logger) {
+            this.ativoFinanceiroRepository = ativoFinanceiroRepository ?? throw new ArgumentNullException(nameof(ativoFinanceiroRepository));
+            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
-        public async Task<bool> Handle(CriarAtivoCommand request, CancellationToken cancellationToken) {
+        public async Task<AtivoFinanceiro> Handle(CriarAtivoCommand request, CancellationToken cancellationToken) {
             var ativoFinanceiro = new AtivoFinanceiro(
                 Guid.NewGuid().ToString(),
                 request.Nome,
@@ -28,16 +26,14 @@ namespace PeraInvest.API.Commands.Handlers {
                 request.Status
             );
 
-            _logger.LogInformation("Criando Ativo Financeiro: {@AtivoFinanceiro}", ativoFinanceiro);
+            logger.LogInformation("Criando Ativo Financeiro: {@AtivoFinanceiro}", ativoFinanceiro.Nome.ToString());
 
-            _ativoFinanceiroRepository.CriarAtivo(ativoFinanceiro);
+            var result = ativoFinanceiroRepository.CriarAtivo(ativoFinanceiro);
 
-            return await _ativoFinanceiroRepository.UnitOfWork
-                .SaveEntitiesAsync(cancellationToken);
+            await ativoFinanceiroRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+
+            return result;
         }
 
-        Task<AtivoFinanceiro> IRequestHandler<CriarAtivoCommand, AtivoFinanceiro>.Handle(CriarAtivoCommand request, CancellationToken cancellationToken) {
-            throw new NotImplementedException();
-        }
     }
 }

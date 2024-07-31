@@ -13,7 +13,7 @@ namespace PeraInvest.Infrastructure.Repositories {
         }
 
         public AtivoFinanceiroRepository(AtivoFinanceiroContext ativoFinanceiroContext) {
-            _ativoFinanceiroContext = ativoFinanceiroContext;
+            _ativoFinanceiroContext = ativoFinanceiroContext ?? throw new ArgumentNullException(nameof(AtivoFinanceiroContext));
         }
 
         public AtivoFinanceiro AtualizarAtivo(AtivoFinanceiro ativoFinanceiro) {
@@ -26,10 +26,6 @@ namespace PeraInvest.Infrastructure.Repositories {
 
         public void DeletarAtivo(AtivoFinanceiro ativoFinanceiro) {
             _ativoFinanceiroContext.Remove(ativoFinanceiro);
-        }
-
-        public void Dispose() {
-            throw new NotImplementedException();
         }
 
         public AtivoFinanceiro ObterAtivo(string id) {
