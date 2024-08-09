@@ -3,9 +3,9 @@
 namespace PeraInvest.Domain.Ports
 {
     interface ICarteiraPort {
-        AtivoCarteira AdicionarAtivoCarteira(Carteira carteira, AtivoCarteira ativoCarteira);
-        void RemoverAtivoCarteira(Carteira carteira, AtivoCarteira ativoCarteira);
-        Carteira CriarCarteira(string usuarioId, List<AtivoCarteira> ativosCarteira);
+        OperacaoAtivoCarteira AdicionarOperacaoAtivoCarteira(Carteira carteira, OperacaoAtivoCarteira ativoCarteira);
+        void RemoverOperacaoAtivoCarteira(Carteira carteira, OperacaoAtivoCarteira ativoCarteira);
+        Carteira CriarCarteira(string usuarioId, List<OperacaoAtivoCarteira> ativosCarteira);
         Carteira ObterCarteira(string id);
     }
 }

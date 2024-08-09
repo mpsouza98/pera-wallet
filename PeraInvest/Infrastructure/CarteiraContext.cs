@@ -11,6 +11,7 @@ public partial class CarteiraContext : DbContext, IUnitOfWork {
     }
 
     public virtual DbSet<AtivoFinanceiro> AtivosFinanceiro { get; set; }
+    public virtual DbSet<OperacaoAtivoCarteira> OperacaoAtivoCarteiras { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<AtivoFinanceiro>(entity => {

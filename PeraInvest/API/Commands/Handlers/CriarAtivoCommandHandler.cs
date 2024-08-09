@@ -14,7 +14,7 @@ namespace PeraInvest.API.Commands.Handlers {
 
         public async Task<AtivoFinanceiro> Handle(CriarAtivoCommand request, CancellationToken cancellationToken) {
             var ativoFinanceiro = new AtivoFinanceiro(
-                Guid.NewGuid().ToString(),
+                Guid.NewGuid().ToByteArray(),
                 request.Nome,
                 request.Descricao,
                 request.CodigoNegociacao,
@@ -30,7 +30,7 @@ namespace PeraInvest.API.Commands.Handlers {
 
             var result = ativoFinanceiroRepository.CriarAtivo(ativoFinanceiro);
 
-            await ativoFinanceiroRepository.UnitOfWork.SaveEntitiesAsync(cancellationToken);
+            await ativoFinanceiroRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
             return result;
         }

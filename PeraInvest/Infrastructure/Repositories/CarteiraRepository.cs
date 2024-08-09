@@ -16,15 +16,15 @@ namespace PeraInvest.Infrastructure.Repositories {
             _carteiraContext = carteiraContext ?? throw new ArgumentNullException(nameof(carteiraContext));
         }
 
-        public AtivoCarteira AdicionarAtivo(Carteira carteira, AtivoCarteira ativoCarteira) {
+        public OperacaoAtivoCarteira AdicionarAtivo(Carteira carteira, OperacaoAtivoCarteira ativoCarteira) {
             throw new NotImplementedException();
         }
 
-        public Carteira CriarCarteira(string usuarioId, List<AtivoCarteira> ativosCarteira) {
+        public Carteira CriarCarteira(string usuarioId, List<OperacaoAtivoCarteira> ativosCarteira) {
             throw new NotImplementedException();
         }
 
-        public void DeletarAtivo(Carteira carteira, AtivoCarteira ativoCarteira) {
+        public void DeletarAtivo(Carteira carteira, OperacaoAtivoCarteira ativoCarteira) {
             throw new NotImplementedException();
         }
 

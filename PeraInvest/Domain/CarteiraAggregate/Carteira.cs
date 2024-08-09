@@ -5,27 +5,47 @@ namespace PeraInvest.Domain.CarteiraAggregate {
         public string Id { get; }
         public string UsuarioId { get; set; }
         public DateTime CriadoEm { get; set; }
-        public List<AtivoCarteira> AtivosCarteira { get; set; }
-        public decimal ValorInvestido { get; set; }
-        public decimal RendimentoTotalCarteira { get; set; }
+        public List<OperacaoAtivoCarteira> AtivosCarteira { get; set; }
 
-        public Carteira(string id, string usuarioId, DateTime criadoEm, List<AtivoCarteira> ativosCarteira, decimal valorTotal, decimal rendimentoTotalCarteira) =>
-            (Id, UsuarioId, CriadoEm, AtivosCarteira, ValorInvestido, RendimentoTotalCarteira) = (id, usuarioId, criadoEm, ativosCarteira, valorTotal, rendimentoTotalCarteira);
+        public Carteira(string id, string usuarioId, DateTime criadoEm, List<OperacaoAtivoCarteira> ativosCarteira) =>
+            (Id, UsuarioId, CriadoEm, AtivosCarteira) = (id, usuarioId, criadoEm, ativosCarteira);
 
-        public void CalculaValorInvestido() {
+        public decimal CalculaValorInvestido() {
             decimal valorTotal = 0;
-            foreach (AtivoCarteira ativoCarteira in AtivosCarteira) {
+            foreach (OperacaoAtivoCarteira ativoCarteira in AtivosCarteira) {
                 valorTotal += ativoCarteira.ValorInvestido;
             }
-            ValorInvestido = valorTotal;
+            return valorTotal;
         }
 
-        public AtivoCarteira AdicionaAtivoCarteira(AtivoCarteira ativoCarteira) {
-            var AtivoCarteiraExistente = AtivosCarteira.FirstOrDefault(a => a.IsEqualTo(ativoCarteira.Ativo, ativoCarteira.DataCompra));
+        public decimal CalculaValorAcumulado() {
+            decimal valorTotal = 0;
+            foreach (OperacaoAtivoCarteira ativoCarteira in AtivosCarteira) {
+                valorTotal += ativoCarteira.ValorAcumulado;
+            }
+            return valorTotal;
+        }
 
-            if (AtivoCarteiraExistente != null) {
-                AtivoCarteiraExistente.ValorInvestido += ativoCarteira.ValorInvestido;
-                return AtivoCarteiraExistente;
+        public decimal CalculaRendimentoCarteira() {
+            decimal investido = CalculaValorAcumulado();
+            decimal acumulado = CalculaValorInvestido();
+
+            return investido - acumulado;
+        }
+
+        public decimal CalculoRentabilidade() {
+            decimal rendimento = CalculaRendimentoCarteira();
+            decimal investido = CalculaValorInvestido();
+
+            return (rendimento / investido) * 100;
+        }
+
+        public OperacaoAtivoCarteira AdicionaOperacaoAtivoCarteira(OperacaoAtivoCarteira ativoCarteira) {
+            var OperacaoAtivoCarteiraExistente = AtivosCarteira.FirstOrDefault(a => a.IsEqualTo(ativoCarteira.Ativo, ativoCarteira.DataCompra));
+
+            if (OperacaoAtivoCarteiraExistente != null) {
+                OperacaoAtivoCarteiraExistente.ValorInvestido += ativoCarteira.ValorInvestido;
+                return OperacaoAtivoCarteiraExistente;
             }
 
             AtivosCarteira.Add(ativoCarteira);

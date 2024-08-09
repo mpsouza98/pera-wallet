@@ -1,19 +1,20 @@
-﻿using PeraInvest.Domain.CarteiraAggregate;
+﻿using Microsoft.EntityFrameworkCore;
+using PeraInvest.Domain.CarteiraAggregate;
 using PeraInvest.Domain.CarteiraAggregate.Repository;
 using PeraInvest.Domain.SeedWork;
 
 namespace PeraInvest.Infrastructure.Repositories {
     public class AtivoFinanceiroRepository : IAtivoFinanceiroRepository {
-        private readonly AtivoFinanceiroContext _ativoFinanceiroContext;
+        private readonly AtivoFinanceiroContext context;
 
         public IUnitOfWork UnitOfWork {
             get {
-                return _ativoFinanceiroContext;
+                return context;
             }
         }
 
-        public AtivoFinanceiroRepository(AtivoFinanceiroContext ativoFinanceiroContext) {
-            _ativoFinanceiroContext = ativoFinanceiroContext ?? throw new ArgumentNullException(nameof(AtivoFinanceiroContext));
+        public AtivoFinanceiroRepository(AtivoFinanceiroContext context) {
+            this.context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         public AtivoFinanceiro AtualizarAtivo(AtivoFinanceiro ativoFinanceiro) {
@@ -21,15 +22,17 @@ namespace PeraInvest.Infrastructure.Repositories {
         }
 
         public AtivoFinanceiro CriarAtivo(AtivoFinanceiro ativoFinanceiro) {
-            return _ativoFinanceiroContext.Add(ativoFinanceiro).Entity;
+            return context.AtivosFinanceiro.Add(ativoFinanceiro).Entity;
         }
 
         public void DeletarAtivo(AtivoFinanceiro ativoFinanceiro) {
-            _ativoFinanceiroContext.Remove(ativoFinanceiro);
+            context.Remove(ativoFinanceiro);
         }
 
-        public AtivoFinanceiro ObterAtivo(string id) {
-            throw new NotImplementedException();
+        public async Task<AtivoFinanceiro> ObterAtivo(string codigo) {
+            return await context.AtivosFinanceiro
+                .Where(a => a.CodigoNegociacao == codigo)
+                .SingleAsync();
         }
     }
 }

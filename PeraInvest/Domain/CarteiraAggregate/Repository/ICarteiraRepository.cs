@@ -1,9 +1,9 @@
 ﻿namespace PeraInvest.Domain.CarteiraAggregate.Repository {
     public interface ICarteiraRepository : IRepository<Carteira> {
 
-        AtivoCarteira AdicionarAtivo(Carteira carteira, AtivoCarteira ativoCarteira);
-        void DeletarAtivo(Carteira carteira, AtivoCarteira ativoCarteira);
-        Carteira CriarCarteira(string usuarioId, List<AtivoCarteira> ativosCarteira);
+        OperacaoAtivoCarteira AdicionarAtivo(Carteira carteira, OperacaoAtivoCarteira ativoCarteira);
+        void DeletarAtivo(Carteira carteira, OperacaoAtivoCarteira ativoCarteira);
+        Carteira CriarCarteira(string usuarioId, List<OperacaoAtivoCarteira> ativosCarteira);
         Carteira ObterCarteira(string id);
     }
 }
