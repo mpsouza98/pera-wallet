@@ -1,16 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Infrastructure;
+using Microsoft.AspNetCore.Mvc;
 using PeraInvest.Domain.CarteiraAggregate;
-using PeraInvest.Infrastructure;
+using PeraInvest.Domain.CarteiraAggregate.Repository;
+using PeraInvest.Domain.SeedWork;
+using PeraInvest.Infrastructure.Repositories;
 
-namespace PeraInvest.API.Controllers
-{
-    [Route("[controller]")]
+namespace PeraInvest.API.Controllers {
+    [Route("/api/carteiras")]
     [ApiController]
     public class CarteiraController : ControllerBase {
-        private readonly CarteiraContext _context;
+        private readonly CarteiraContext context;
+        private readonly IAtivoFinanceiroRepository ativoFinanceiroRepository;
 
-        public CarteiraController(CarteiraContext context) {
-            _context = context;
+        public CarteiraController(CarteiraContext carteiraContext, IAtivoFinanceiroRepository ativoRepository) {
+            context = carteiraContext;
+            ativoFinanceiroRepository = ativoRepository
+                ?? throw new ArgumentNullException(nameof(ativoFinanceiroRepository));
         }
 
         //[HttpGet]
@@ -28,5 +33,28 @@ namespace PeraInvest.API.Controllers
 
         //    return carteira;
         //}
+        [HttpPost]
+        public async Task<ActionResult<Carteira>> PostCarteira() {
+            Carteira carteira = new(DateTime.Now);
+
+            AtivoFinanceiro ativo = ativoFinanceiroRepository.ObterAtivo("string3").Result;
+
+            OperacaoAtivoCarteira operacao = new(
+                ativo.Id,
+                carteira.Id,
+                9000.36m,
+                9000.36m,
+                DateTime.Now,
+                DateTime.Now
+            );
+
+            carteira.AdicionaOperacaoCarteira( operacao );
+
+            context.Add(carteira);
+
+            var result = await context.SaveChangesAsync();
+
+            return Ok(carteira);
+        }
     }
 }

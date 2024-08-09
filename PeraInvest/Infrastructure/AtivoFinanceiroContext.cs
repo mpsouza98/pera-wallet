@@ -15,14 +15,16 @@ public class AtivoFinanceiroContext : DbContext, IUnitOfWork {
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
         modelBuilder.Entity<AtivoFinanceiro>(entity => {
-            entity.HasKey(e => e.Id)
-            .HasName("PRIMARY");
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
 
             entity.ToTable("ativos_financeiro");
 
+            entity.HasIndex(e => e.CodigoNegociacao, "codigo_negociacao").IsUnique();
+
             entity.Property(e => e.Id)
-                .IsRequired()
+                .HasDefaultValue(new Guid().ToByteArray())
                 .HasMaxLength(16)
+                .IsFixedLength()
                 .HasColumnName("id");
             entity.Property(e => e.ClasseAtivo).HasColumnName("classe_ativo");
             entity.Property(e => e.CodigoNegociacao)

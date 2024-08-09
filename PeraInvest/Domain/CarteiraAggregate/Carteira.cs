@@ -1,18 +1,29 @@
 ﻿using PeraInvest.Domain.SeedWork;
+using System.ComponentModel.DataAnnotations;
 
 namespace PeraInvest.Domain.CarteiraAggregate {
-    public class Carteira: IAggregateRoot {
-        public string Id { get; }
-        public string UsuarioId { get; set; }
-        public DateTime CriadoEm { get; set; }
-        public List<OperacaoAtivoCarteira> AtivosCarteira { get; set; }
+    public class Carteira: Entity, IAggregateRoot {
+        
+        public byte[]? UsuarioId { get; set; } = null!;
+        public DateTime CriadoEm { get; }
 
-        public Carteira(string id, string usuarioId, DateTime criadoEm, List<OperacaoAtivoCarteira> ativosCarteira) =>
-            (Id, UsuarioId, CriadoEm, AtivosCarteira) = (id, usuarioId, criadoEm, ativosCarteira);
+        // DDD Patterns comment
+        // Using a private collection field, better for DDD Aggregate's encapsulation
+        // so OrderItems cannot be added from "outside the AggregateRoot" directly to the collection,
+        // but only through the method OrderAggregateRoot.AddOrderItem() which includes behavior.
+        private readonly List<OperacaoAtivoCarteira> _operacoesAtivoCarteira;
+        public IReadOnlyCollection<OperacaoAtivoCarteira> OperacoesAtivoCarteira => _operacoesAtivoCarteira.AsReadOnly();
+
+        // EF Core constructor https://stackoverflow.com/questions/55749717/entity-framework-cannot-bind-value-object-in-entity-constructor
+        protected Carteira() => _operacoesAtivoCarteira = [];
+
+        public Carteira(DateTime criadoEm): this() {
+            CriadoEm = criadoEm;
+        }
 
         public decimal CalculaValorInvestido() {
             decimal valorTotal = 0;
-            foreach (OperacaoAtivoCarteira ativoCarteira in AtivosCarteira) {
+            foreach (OperacaoAtivoCarteira ativoCarteira in OperacoesAtivoCarteira) {
                 valorTotal += ativoCarteira.ValorInvestido;
             }
             return valorTotal;
@@ -20,7 +31,7 @@ namespace PeraInvest.Domain.CarteiraAggregate {
 
         public decimal CalculaValorAcumulado() {
             decimal valorTotal = 0;
-            foreach (OperacaoAtivoCarteira ativoCarteira in AtivosCarteira) {
+            foreach (OperacaoAtivoCarteira ativoCarteira in OperacoesAtivoCarteira) {
                 valorTotal += ativoCarteira.ValorAcumulado;
             }
             return valorTotal;
@@ -40,15 +51,15 @@ namespace PeraInvest.Domain.CarteiraAggregate {
             return (rendimento / investido) * 100;
         }
 
-        public OperacaoAtivoCarteira AdicionaOperacaoAtivoCarteira(OperacaoAtivoCarteira ativoCarteira) {
-            var OperacaoAtivoCarteiraExistente = AtivosCarteira.FirstOrDefault(a => a.IsEqualTo(ativoCarteira.Ativo, ativoCarteira.DataCompra));
+        public OperacaoAtivoCarteira AdicionaOperacaoCarteira(OperacaoAtivoCarteira ativoCarteira) {
+            var OperacaoAtivoCarteiraExistente = _operacoesAtivoCarteira.FirstOrDefault(a => a.IsEqualTo(ativoCarteira.Ativo, ativoCarteira.DataCompra));
 
             if (OperacaoAtivoCarteiraExistente != null) {
                 OperacaoAtivoCarteiraExistente.ValorInvestido += ativoCarteira.ValorInvestido;
                 return OperacaoAtivoCarteiraExistente;
             }
 
-            AtivosCarteira.Add(ativoCarteira);
+            _operacoesAtivoCarteira.Add(ativoCarteira);
             return ativoCarteira;
         }
     }

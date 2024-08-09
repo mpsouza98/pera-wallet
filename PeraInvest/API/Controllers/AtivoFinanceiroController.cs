@@ -1,17 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Mysqlx.Crud;
-using Org.BouncyCastle.Asn1.Ocsp;
 using PeraInvest.API.Commands;
-using PeraInvest.API.Queries;
-using PeraInvest.API.Queries.ViewModels;
 using PeraInvest.Domain.CarteiraAggregate;
-using PeraInvest.Infrastructure;
+using PeraInvest.Domain.CarteiraAggregate.Repository;
 
 namespace PeraInvest.API.Controllers {
 
-    [Route("/api/ativo_financeiro")]
+    [Route("/api/ativos_financeiro")]
     [ApiController]
     public class AtivoFinanceiroController : ControllerBase {
         private readonly IMediator mediator;

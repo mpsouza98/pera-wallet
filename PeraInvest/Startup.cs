@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Infrastructure;
+using Microsoft.EntityFrameworkCore;
 using PeraInvest.API.Clients;
 using PeraInvest.API.Clients.auth;
 using PeraInvest.Domain.CarteiraAggregate.Repository;

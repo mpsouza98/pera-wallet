@@ -20,13 +20,21 @@ CREATE TABLE ativos_financeiro (
     status TINYINT(1)
 );
 
-CREATE TABLE operacao_carteira (
+CREATE TABLE carteiras (
+    id BINARY(16) PRIMARY KEY,
+    usuario_id BINARY(16) UNIQUE,
+    criado_em DATETIME NOT NULL
+);
+
+CREATE TABLE operacoes_carteira (
     id BINARY(16) PRIMARY KEY,
     ativo_id BINARY(16) NOT NULL,
+    carteira_id BINARY(16) NOT NULL,
     valor_investido DECIMAL(10,2) NOT NULL,
     valor_acumulado DECIMAL(10,2) NOT NULL,
     data_valorizacao DATETIME NOT NULL,
     data_compra DATETIME NOT NULL,
 
-    FOREIGN KEY (ativo_id) REFERENCES ativos_financeiro(id)
+    FOREIGN KEY (ativo_id) REFERENCES ativos_financeiro(id),
+    FOREIGN KEY (carteira_id) REFERENCES carteiras(id)
 );

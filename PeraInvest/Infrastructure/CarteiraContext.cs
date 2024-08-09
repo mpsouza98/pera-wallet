@@ -1,52 +1,92 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using PeraInvest.Domain.CarteiraAggregate;
 using PeraInvest.Domain.SeedWork;
 
-namespace PeraInvest.Infrastructure;
+namespace Infrastructure;
 
 public partial class CarteiraContext : DbContext, IUnitOfWork {
+    public CarteiraContext() {
+    }
 
     public CarteiraContext(DbContextOptions<CarteiraContext> options)
         : base(options) {
     }
 
     public virtual DbSet<AtivoFinanceiro> AtivosFinanceiro { get; set; }
-    public virtual DbSet<OperacaoAtivoCarteira> OperacaoAtivoCarteiras { get; set; }
+
+    public virtual DbSet<Carteira> Carteiras { get; set; }
+
+    public virtual DbSet<OperacaoAtivoCarteira> OperacoesCarteira { get; set; }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        => optionsBuilder.UseMySQL("Name=ConnectionStrings:Default");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder) {
-        modelBuilder.Entity<AtivoFinanceiro>(entity => {
+        modelBuilder.Entity<Carteira>(entity => {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
 
-            entity.ToTable("ativos_financeiro");
+            entity.ToTable("carteiras");
+
+            entity.HasIndex(e => e.UsuarioId, "usuario_id").IsUnique();
 
             entity.Property(e => e.Id)
-                .HasMaxLength(36)
+                .HasMaxLength(16)
+                .IsFixedLength()
                 .HasColumnName("id");
-            entity.Property(e => e.ClasseAtivo).HasColumnName("classe_ativo");
-            entity.Property(e => e.CodigoNegociacao)
-                .HasMaxLength(40)
-                .HasColumnName("codigo_negociacao");
-            entity.Property(e => e.DataEmissao)
+            entity.Property(e => e.CriadoEm)
                 .HasColumnType("datetime")
-                .HasColumnName("data_emissao");
-            entity.Property(e => e.DataVencimento)
+                .HasColumnName("criado_em");
+            entity.Property(e => e.UsuarioId)
+                .HasMaxLength(16)
+                .IsFixedLength()
+                .HasColumnName("usuario_id");
+        });
+
+        modelBuilder.Entity<OperacaoAtivoCarteira>(entity => {
+            entity.HasKey(e => e.Id).HasName("PRIMARY");
+
+            entity.ToTable("operacoes_carteira");
+
+            entity.HasIndex(e => e.AtivoId, "ativo_id");
+
+            entity.HasIndex(e => e.CarteiraId, "carteira_id");
+
+            entity.Property(e => e.Id)
+                .HasMaxLength(16)
+                .IsFixedLength()
+                .HasColumnName("id");
+            entity.Property(e => e.AtivoId)
+                .HasMaxLength(16)
+                .IsFixedLength()
+                .HasColumnName("ativo_id");
+            entity.Property(e => e.CarteiraId)
+                .HasMaxLength(16)
+                .IsFixedLength()
+                .HasColumnName("carteira_id");
+            entity.Property(e => e.DataCompra)
                 .HasColumnType("datetime")
-                .HasColumnName("data_vencimento");
-            entity.Property(e => e.Descricao)
-                .HasColumnType("text")
-                .HasColumnName("descricao");
-            entity.Property(e => e.Emissor)
-                .HasMaxLength(255)
-                .HasColumnName("emissor");
-            entity.Property(e => e.Index)
-                .HasPrecision(10)
-                .HasColumnName("idx");
-            entity.Property(e => e.Nome)
-                .HasMaxLength(255)
-                .HasColumnName("nome");
-            entity.Property(e => e.Status).HasColumnName("status");
+                .HasColumnName("data_compra");
+            entity.Property(e => e.DataValorizacao)
+                .HasColumnType("datetime")
+                .HasColumnName("data_valorizacao");
+            entity.Property(e => e.ValorAcumulado)
+                .HasPrecision(10, 2)
+                .HasColumnName("valor_acumulado");
+            entity.Property(e => e.ValorInvestido)
+                .HasPrecision(10, 2)
+                .HasColumnName("valor_investido");
+
+            entity.HasOne(d => d.Ativo).WithMany(p => p.OperacoesAtivoCarteira)
+                .HasForeignKey(d => d.AtivoId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasConstraintName("operacoes_carteira_ibfk_1");
+
+            entity.OwnsOne(e => e.Carteira);
         });
     }
+
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default(CancellationToken)) {
         // Dispatch Domain Events collection. 
         // Choices:
@@ -62,4 +102,5 @@ public partial class CarteiraContext : DbContext, IUnitOfWork {
 
         return true;
     }
+
 }

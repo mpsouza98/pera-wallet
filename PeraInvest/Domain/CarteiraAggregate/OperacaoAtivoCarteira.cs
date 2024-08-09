@@ -1,17 +1,20 @@
-﻿namespace PeraInvest.Domain.CarteiraAggregate
-{
-    public class OperacaoAtivoCarteira
-    {
-        public string Id { get; }
-        public AtivoFinanceiro Ativo { get; set; }
+﻿using PeraInvest.Domain.SeedWork;
+
+namespace PeraInvest.Domain.CarteiraAggregate {
+    public class OperacaoAtivoCarteira: Entity, IAggregateRoot {
+        public byte[] AtivoId { get; set; } = null!;
+        public byte[] CarteiraId { get; set; } = null!;
         public decimal ValorInvestido { get; set; }
         public decimal ValorAcumulado { get; set; }
         public DateTime DataValorizacao { get; set; }
-        public DateTime DataCompra {  get; set; }
+        public DateTime DataCompra { get; set; }
 
-        public OperacaoAtivoCarteira(string id, AtivoFinanceiro ativo, decimal valorInvestido, decimal valorAcumulado, DateTime dataValorizacao, DateTime dataCompra) {
-            Id = id;
-            Ativo = ativo;
+        public virtual AtivoFinanceiro Ativo { get; set; } = null!;
+        public virtual Carteira Carteira { get; set; } = null!;
+
+        public OperacaoAtivoCarteira(byte[] ativoId, byte[] carteiraId, decimal valorInvestido, decimal valorAcumulado, DateTime dataValorizacao, DateTime dataCompra) {
+            AtivoId = ativoId;
+            CarteiraId = carteiraId;
             ValorInvestido = valorInvestido;
             ValorAcumulado = valorAcumulado;
             DataValorizacao = dataValorizacao;
@@ -19,7 +22,7 @@
         }
 
         public bool IsEqualTo(AtivoFinanceiro ativoFinanceiro, DateTime dataCompra) {
-            return Ativo.IsEqualTo(ativoFinanceiro) 
+            return Ativo.IsEqualTo(ativoFinanceiro)
                 && DataCompra.Equals(dataCompra);
         }
     }
