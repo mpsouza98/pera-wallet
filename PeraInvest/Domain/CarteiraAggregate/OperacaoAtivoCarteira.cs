@@ -13,6 +13,7 @@ namespace PeraInvest.Domain.CarteiraAggregate {
         public virtual Carteira Carteira { get; set; } = null!;
 
         public OperacaoAtivoCarteira(byte[] ativoId, byte[] carteiraId, decimal valorInvestido, decimal valorAcumulado, DateTime dataValorizacao, DateTime dataCompra) {
+            Id = Guid.NewGuid().ToByteArray();
             AtivoId = ativoId;
             CarteiraId = carteiraId;
             ValorInvestido = valorInvestido;

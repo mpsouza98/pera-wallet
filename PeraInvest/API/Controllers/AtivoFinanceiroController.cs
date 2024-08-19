@@ -2,8 +2,7 @@
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PeraInvest.API.Commands;
-using PeraInvest.Domain.CarteiraAggregate;
-using PeraInvest.Domain.CarteiraAggregate.Repository;
+using PeraInvest.API.Commands.Handlers;
 
 namespace PeraInvest.API.Controllers {
 
@@ -20,7 +19,7 @@ namespace PeraInvest.API.Controllers {
         }
 
         [HttpPost]
-        public async Task<Results<Ok<AtivoFinanceiro>, BadRequest<CriarAtivoCommand>>> PostAtivoFinanceiro([FromBody] CriarAtivoCommand criarAtivoCommand) {
+        public async Task<Results<Ok<CriarAtivoFinanceiroResponse>, BadRequest<CriarAtivoCommand>>> PostAtivoFinanceiro([FromBody] CriarAtivoCommand criarAtivoCommand) {
             logger.LogInformation("Criando novo ativo financeiro");
             
             var result = await mediator.Send(criarAtivoCommand);

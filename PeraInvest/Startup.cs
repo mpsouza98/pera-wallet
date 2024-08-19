@@ -1,7 +1,12 @@
-﻿using Infrastructure;
+﻿using AutoMapper;
+using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using Mysqlx.Crud;
 using PeraInvest.API.Clients;
 using PeraInvest.API.Clients.auth;
+using PeraInvest.API.Commands.Handlers;
+using PeraInvest.API.Controllers.Mappers;
+using PeraInvest.Domain.CarteiraAggregate;
 using PeraInvest.Domain.CarteiraAggregate.Repository;
 using PeraInvest.Infrastructure;
 using PeraInvest.Infrastructure.Repositories;
@@ -44,9 +49,16 @@ namespace PeraInvest {
 
             services.AddControllers();
 
+            services.AddControllers()
+                .AddJsonOptions(options => {
+                    options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
+                });
+
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
 
             services.AddScoped<IAtivoFinanceiroRepository, AtivoFinanceiroRepository>();
+
+            services.AddAutoMapper(typeof(Startup));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

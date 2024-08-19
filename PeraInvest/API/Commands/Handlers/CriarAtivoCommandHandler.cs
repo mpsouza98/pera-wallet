@@ -1,18 +1,22 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using PeraInvest.Domain.CarteiraAggregate;
 using PeraInvest.Domain.CarteiraAggregate.Repository;
+using static PeraInvest.Domain.CarteiraAggregate.AtivoFinanceiro;
 
 namespace PeraInvest.API.Commands.Handlers {
-    public class CriarAtivoCommandHandler : IRequestHandler<CriarAtivoCommand, AtivoFinanceiro> {
+    public class CriarAtivoCommandHandler : IRequestHandler<CriarAtivoCommand, CriarAtivoFinanceiroResponse> {
         private readonly IAtivoFinanceiroRepository ativoFinanceiroRepository;
         private readonly ILogger<CriarAtivoCommandHandler> logger;
+        private readonly IMapper mapper;
 
-        public CriarAtivoCommandHandler(IAtivoFinanceiroRepository ativoFinanceiroRepository, ILogger<CriarAtivoCommandHandler> logger) {
+        public CriarAtivoCommandHandler(IAtivoFinanceiroRepository ativoFinanceiroRepository, ILogger<CriarAtivoCommandHandler> logger, IMapper mapper) {
             this.ativoFinanceiroRepository = ativoFinanceiroRepository ?? throw new ArgumentNullException(nameof(ativoFinanceiroRepository));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
+            this.mapper = mapper ?? throw new ArgumentNullException( nameof(mapper));
         }
 
-        public async Task<AtivoFinanceiro> Handle(CriarAtivoCommand request, CancellationToken cancellationToken) {
+        public async Task<CriarAtivoFinanceiroResponse> Handle(CriarAtivoCommand request, CancellationToken cancellationToken) {
             var ativoFinanceiro = new AtivoFinanceiro(
                 request.Nome,
                 request.Descricao,
@@ -31,8 +35,23 @@ namespace PeraInvest.API.Commands.Handlers {
 
             await ativoFinanceiroRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
 
-            return result;
+            var reponse = mapper.Map<CriarAtivoFinanceiroResponse>(result);
+
+            return mapper.Map<CriarAtivoFinanceiroResponse>(result);
         }
 
+    }
+
+    public class CriarAtivoFinanceiroResponse() {
+        public string Id { get; set; }
+        public string Nome { get; set; }
+        public string Descricao { get; set; }
+        public string CodigoNegociacao { get; set; }
+        public decimal? Index { get; set; }
+        public ClassesAtivo ClasseAtivo { get; set; }
+        public DateTime? DataVencimento { get; set; }
+        public DateTime? DataEmissao { get; set; }
+        public string? Emissor { get; set; }
+        public Boolean Status { get; set; }
     }
 }

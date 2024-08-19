@@ -6,7 +6,7 @@
                 return _Id;
             }
             protected set {
-                _Id = new Guid().ToByteArray();
+                _Id = value;
             }
         }
     }

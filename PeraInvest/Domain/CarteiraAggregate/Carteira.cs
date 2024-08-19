@@ -18,6 +18,7 @@ namespace PeraInvest.Domain.CarteiraAggregate {
         protected Carteira() => _operacoesAtivoCarteira = [];
 
         public Carteira(DateTime criadoEm): this() {
+            Id = Guid.NewGuid().ToByteArray();
             CriadoEm = criadoEm;
         }
 

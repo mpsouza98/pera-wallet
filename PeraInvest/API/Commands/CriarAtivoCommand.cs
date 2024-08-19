@@ -1,12 +1,12 @@
 ﻿using MediatR;
-using PeraInvest.Domain.CarteiraAggregate;
+using PeraInvest.API.Commands.Handlers;
 using System.Runtime.Serialization;
 using static PeraInvest.Domain.CarteiraAggregate.AtivoFinanceiro;
 
 namespace PeraInvest.API.Commands {
 
     [DataContract]
-    public class CriarAtivoCommand : IRequest<AtivoFinanceiro> {
+    public class CriarAtivoCommand : IRequest<CriarAtivoFinanceiroResponse> {
 
         [DataMember(EmitDefaultValue = false)]
         public string Nome { get; private set; }

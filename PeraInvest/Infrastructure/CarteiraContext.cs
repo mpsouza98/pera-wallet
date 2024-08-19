@@ -82,8 +82,6 @@ public partial class CarteiraContext : DbContext, IUnitOfWork {
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasConstraintName("operacoes_carteira_ibfk_1");
-
-            entity.OwnsOne(e => e.Carteira);
         });
     }
 

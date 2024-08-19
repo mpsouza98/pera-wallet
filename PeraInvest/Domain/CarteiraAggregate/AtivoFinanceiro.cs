@@ -17,8 +17,18 @@ namespace PeraInvest.Domain.CarteiraAggregate
 
         public enum ClassesAtivo { ACAO, CRIPTOMOEDA, DEBENTURE, FUNDO_IMOBILIARIO, MOEDA, PREVIDENCIA, RENDA_FIXA_PREFIXADA, RENDA_FIXA_POS_FIXADA, TESOURO_DIRETO }
 
-        public AtivoFinanceiro(string nome, string descricao, string codigoNegociacao, decimal? index, ClassesAtivo classeAtivo, DateTime? dataVencimento, DateTime? dataEmissao, string emissor, Boolean status) =>
-            (Nome, Descricao, CodigoNegociacao, Index, ClasseAtivo, DataVencimento, DataEmissao, Emissor, Status) = (nome, descricao, codigoNegociacao, index, classeAtivo, dataVencimento, dataEmissao, emissor, status);
+        public AtivoFinanceiro(string nome, string descricao, string codigoNegociacao, decimal? index, ClassesAtivo classeAtivo, DateTime? dataVencimento, DateTime? dataEmissao, string? emissor, bool status) {
+            Id = Guid.NewGuid().ToByteArray();
+            Nome = nome;
+            Descricao = descricao;
+            CodigoNegociacao = codigoNegociacao;
+            Index = index;
+            ClasseAtivo = classeAtivo;
+            DataVencimento = dataVencimento;
+            DataEmissao = dataEmissao;
+            Emissor = emissor;
+            Status = status;
+        }
 
         public bool IsEqualTo(AtivoFinanceiro ativoFinanceiro) => ativoFinanceiro.Id == Id;
     }
