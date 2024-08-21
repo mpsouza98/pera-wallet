@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PeraInvest.Domain.CarteiraAggregate;
+using PeraInvest.Domain.CarteiraAggregate.Exceptions;
 using PeraInvest.Domain.CarteiraAggregate.Repository;
 using PeraInvest.Domain.SeedWork;
 
@@ -30,9 +31,19 @@ namespace PeraInvest.Infrastructure.Repositories {
         }
 
         public async Task<AtivoFinanceiro> ObterAtivo(string codigo) {
-            return await context.AtivosFinanceiro
+            var result = await context.AtivosFinanceiro
+                .Where(a => a.CodigoNegociacao == codigo)
+                .SingleAsync() ?? throw new EntityNotFoundException($"AtivoFinanceiro nao encontrado! codigo={codigo}");
+
+            return result;
+        }
+
+        public async Task<bool> IsAtivoExistente(string codigo) {
+            var result = await context.AtivosFinanceiro
                 .Where(a => a.CodigoNegociacao == codigo)
                 .SingleAsync();
+
+            return (result != null);
         }
     }
 }

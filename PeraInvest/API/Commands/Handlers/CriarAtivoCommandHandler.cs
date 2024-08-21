@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using PeraInvest.Domain.CarteiraAggregate;
+using PeraInvest.Domain.CarteiraAggregate.Exceptions;
 using PeraInvest.Domain.CarteiraAggregate.Repository;
 using static PeraInvest.Domain.CarteiraAggregate.AtivoFinanceiro;
 
@@ -17,6 +18,10 @@ namespace PeraInvest.API.Commands.Handlers {
         }
 
         public async Task<CriarAtivoFinanceiroResponse> Handle(CriarAtivoCommand request, CancellationToken cancellationToken) {
+            var ativoExistente = await ativoFinanceiroRepository.IsAtivoExistente(request.CodigoNegociacao);
+
+            if (ativoExistente) throw new EntityAlreadyExistsException($"AtivoFinanceiro ja foi cadastrado! codigo={request.CodigoNegociacao}");
+
             var ativoFinanceiro = new AtivoFinanceiro(
                 request.Nome,
                 request.Descricao,
