@@ -41,7 +41,7 @@ namespace PeraInvest.Infrastructure.Repositories {
         public async Task<bool> IsAtivoExistente(string codigo) {
             var result = await context.AtivosFinanceiro
                 .Where(a => a.CodigoNegociacao == codigo)
-                .SingleAsync();
+                .SingleOrDefaultAsync();
 
             return (result != null);
         }

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PeraInvest.API.Commands;
 using PeraInvest.API.Commands.Handlers;
@@ -19,13 +18,13 @@ namespace PeraInvest.API.Controllers {
         }
 
         [HttpPost]
-        public async Task<Results<Ok<CriarAtivoFinanceiroResponse>, BadRequest<CriarAtivoCommand>>> PostAtivoFinanceiro([FromBody] CriarAtivoCommand criarAtivoCommand) {
+        public async Task<ActionResult<CriarAtivoFinanceiroResponse>> PostAtivoFinanceiro([FromBody] CriarAtivoCommand criarAtivoCommand) {
             logger.LogInformation("Criando novo ativo financeiro");
             
             var result = await mediator.Send(criarAtivoCommand);
             logger.LogInformation("Sucesso no comando de criar ativo financeiro");
 
-            return TypedResults.Ok(result);
+            return CreatedAtAction(nameof(PostAtivoFinanceiro), new { id = result.Id }, result);
         }
 
         //[HttpGet]

@@ -46,8 +46,8 @@ namespace PeraInvest {
             services.AddControllers(options => {
                 options.Filters.Add<ExceptionFilter>();
             }).AddJsonOptions(options => {
-                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
-            }); ;
+                options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+            });
 
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
 

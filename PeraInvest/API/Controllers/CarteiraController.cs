@@ -37,7 +37,7 @@ namespace PeraInvest.API.Controllers {
         public async Task<ActionResult<Carteira>> PostCarteira() {
             Carteira carteira = new(DateTime.Now);
 
-            AtivoFinanceiro ativo = ativoFinanceiroRepository.ObterAtivo("string3").Result;
+            AtivoFinanceiro ativo = ativoFinanceiroRepository.ObterAtivo("string").Result;
 
             OperacaoAtivoCarteira operacao = new(
                 ativo.Id,
