@@ -38,3 +38,11 @@ CREATE TABLE operacoes_carteira (
     FOREIGN KEY (ativo_id) REFERENCES ativos_financeiro(id),
     FOREIGN KEY (carteira_id) REFERENCES carteiras(id)
 );
+
+CREATE TABLE processamento_arquivo_batch (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    caminho_arquivo VARCHAR(100) NOT NULL,
+    data_inicio_processamento DATETIME NOT NULL,
+    data_fim_processamento DATETIME,
+    estado_processamento INT NOT NULL
+);

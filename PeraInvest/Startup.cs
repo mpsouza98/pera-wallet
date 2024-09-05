@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using PeraInvest.API.Clients;
 using PeraInvest.API.Clients.auth;
 using PeraInvest.API.Controllers.ExceptionFilters;
+using PeraInvest.API.Queries;
 using PeraInvest.Domain.CarteiraAggregate.Repository;
 using PeraInvest.Infrastructure;
 using PeraInvest.Infrastructure.Repositories;
@@ -52,6 +53,7 @@ namespace PeraInvest {
             services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Startup>());
 
             services.AddScoped<IAtivoFinanceiroRepository, AtivoFinanceiroRepository>();
+            services.AddScoped<IOperacoesCarteiraQuery, OperacoesCarteiraQuery>();
 
             services.AddAutoMapper(typeof(Startup));
         }

@@ -1,27 +1,30 @@
 ﻿using Infrastructure;
 using Microsoft.AspNetCore.Mvc;
+using PeraInvest.API.Queries;
 using PeraInvest.Domain.CarteiraAggregate;
 using PeraInvest.Domain.CarteiraAggregate.Repository;
-using PeraInvest.Domain.SeedWork;
-using PeraInvest.Infrastructure.Repositories;
 
 namespace PeraInvest.API.Controllers {
+
     [Route("/api/carteiras")]
     [ApiController]
     public class CarteiraController : ControllerBase {
         private readonly CarteiraContext context;
         private readonly IAtivoFinanceiroRepository ativoFinanceiroRepository;
+        private readonly OperacoesCarteiraQuery operacoesCarteiraQuery;
 
-        public CarteiraController(CarteiraContext carteiraContext, IAtivoFinanceiroRepository ativoRepository) {
-            context = carteiraContext;
-            ativoFinanceiroRepository = ativoRepository
-                ?? throw new ArgumentNullException(nameof(ativoFinanceiroRepository));
+        public CarteiraController(CarteiraContext carteiraContext, IAtivoFinanceiroRepository ativoRepository, OperacoesCarteiraQuery operacoesQuery) {
+            context = carteiraContext ?? throw new ArgumentNullException(nameof(context));
+            ativoFinanceiroRepository = ativoRepository ?? throw new ArgumentNullException(nameof(ativoFinanceiroRepository));
+            operacoesCarteiraQuery = operacoesQuery ?? throw new ArgumentNullException(nameof(operacoesCarteiraQuery));
         }
 
-        //[HttpGet]
-        //public async Task<ActionResult<IEnumerable<Carteira>>> GetCarteiras() {
-        //    return await _context.Carteiras.ToListAsync();
-        //}
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<OperacaoAtivoCarteira>>> GetOperacoes() {
+            var result = await operacoesCarteiraQuery.ObterBlocoOperacoes(50, 0);
+
+            return Ok(result);
+        }
 
         //[HttpGet("{id}")]
         //public async Task<ActionResult<Carteira>> GetCarteira(string id) {
@@ -33,6 +36,7 @@ namespace PeraInvest.API.Controllers {
 
         //    return carteira;
         //}
+
         [HttpPost]
         public async Task<ActionResult<Carteira>> PostCarteira() {
             Carteira carteira = new(DateTime.Now);
@@ -48,7 +52,7 @@ namespace PeraInvest.API.Controllers {
                 DateTime.Now
             );
 
-            carteira.AdicionaOperacaoCarteira( operacao );
+            carteira.AdicionaOperacaoCarteira(operacao);
 
             context.Add(carteira);
 
