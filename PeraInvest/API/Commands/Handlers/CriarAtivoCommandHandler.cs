@@ -14,7 +14,7 @@ namespace PeraInvest.API.Commands.Handlers {
         public CriarAtivoCommandHandler(IAtivoFinanceiroRepository ativoFinanceiroRepository, ILogger<CriarAtivoCommandHandler> logger, IMapper mapper) {
             this.ativoFinanceiroRepository = ativoFinanceiroRepository ?? throw new ArgumentNullException(nameof(ativoFinanceiroRepository));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.mapper = mapper ?? throw new ArgumentNullException( nameof(mapper));
+            this.mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         }
 
         public async Task<CriarAtivoFinanceiroResponse> Handle(CriarAtivoCommand request, CancellationToken cancellationToken) {
@@ -47,16 +47,15 @@ namespace PeraInvest.API.Commands.Handlers {
 
     }
 
-    public class CriarAtivoFinanceiroResponse() {
-        public string Id { get; set; }
-        public string Nome { get; set; }
-        public string Descricao { get; set; }
-        public string CodigoNegociacao { get; set; }
-        public decimal? Index { get; set; }
-        public ClassesAtivo ClasseAtivo { get; set; }
-        public DateTime? DataVencimento { get; set; }
-        public DateTime? DataEmissao { get; set; }
-        public string? Emissor { get; set; }
-        public Boolean Status { get; set; }
-    }
+    public record CriarAtivoFinanceiroResponse(
+        string Id,
+        string Nome,
+        string Descricao,
+        string CodigoNegociacao,
+        decimal? Index,
+        ClassesAtivo ClasseAtivo,
+        DateTime? DataVencimento,
+        DateTime? DataEmissao,
+        string? Emissor,
+        bool Status);
 }

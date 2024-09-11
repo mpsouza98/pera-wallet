@@ -1,5 +1,6 @@
 ﻿using Infrastructure;
 using Microsoft.EntityFrameworkCore;
+using PeraInvest.API.Batch;
 using PeraInvest.API.Clients;
 using PeraInvest.API.Clients.auth;
 using PeraInvest.API.Controllers.ExceptionFilters;
@@ -56,6 +57,8 @@ namespace PeraInvest {
             services.AddScoped<IOperacoesCarteiraQuery, OperacoesCarteiraQuery>();
 
             services.AddAutoMapper(typeof(Startup));
+
+            services.AddHostedService<ScheduledJobService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

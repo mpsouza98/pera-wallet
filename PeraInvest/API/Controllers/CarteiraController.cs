@@ -11,19 +11,10 @@ namespace PeraInvest.API.Controllers {
     public class CarteiraController : ControllerBase {
         private readonly CarteiraContext context;
         private readonly IAtivoFinanceiroRepository ativoFinanceiroRepository;
-        private readonly OperacoesCarteiraQuery operacoesCarteiraQuery;
 
-        public CarteiraController(CarteiraContext carteiraContext, IAtivoFinanceiroRepository ativoRepository, OperacoesCarteiraQuery operacoesQuery) {
+        public CarteiraController(CarteiraContext carteiraContext, IAtivoFinanceiroRepository ativoRepository) {
             context = carteiraContext ?? throw new ArgumentNullException(nameof(context));
             ativoFinanceiroRepository = ativoRepository ?? throw new ArgumentNullException(nameof(ativoFinanceiroRepository));
-            operacoesCarteiraQuery = operacoesQuery ?? throw new ArgumentNullException(nameof(operacoesCarteiraQuery));
-        }
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<OperacaoAtivoCarteira>>> GetOperacoes() {
-            var result = await operacoesCarteiraQuery.ObterBlocoOperacoes(50, 0);
-
-            return Ok(result);
         }
 
         //[HttpGet("{id}")]
