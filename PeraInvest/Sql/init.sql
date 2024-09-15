@@ -7,7 +7,7 @@ CREATE TABLE perainvest.usuarios(
 	PRIMARY KEY (id)
 );
 
-CREATE TABLE ativos_financeiro (
+CREATE TABLE perainvest.ativos_financeiro (
     id BINARY(16) PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     descricao TEXT,
@@ -20,13 +20,13 @@ CREATE TABLE ativos_financeiro (
     status TINYINT(1)
 );
 
-CREATE TABLE carteiras (
+CREATE TABLE perainvest.carteiras (
     id BINARY(16) PRIMARY KEY,
     usuario_id BINARY(16) UNIQUE,
     criado_em DATETIME NOT NULL
 );
 
-CREATE TABLE operacoes_carteira (
+CREATE TABLE perainvest.operacoes_carteira (
     id BINARY(16) PRIMARY KEY,
     ativo_id BINARY(16) NOT NULL,
     carteira_id BINARY(16) NOT NULL,
@@ -39,10 +39,20 @@ CREATE TABLE operacoes_carteira (
     FOREIGN KEY (carteira_id) REFERENCES carteiras(id)
 );
 
-CREATE TABLE blocos_processamento (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    rotina VARCHAR(40) NOT NULL,
+CREATE TABLE perainvest.rotina (
+    id VARCHAR(36) PRIMARY KEY,
+    nome VARCHAR(60) NOT NULL,
     data_inicio_processamento DATETIME NOT NULL,
-    data_fim_processamento DATETIME,
-    estado_processamento INT NOT NULL,
+    data_fim_processamento DATETIME NOT NULL,
+    estado INT NOT NULL
+);
+
+CREATE TABLE perainvest.blocos_processamento (
+    id INT PRIMARY KEY,
+    rotina_id VARCHAR(36) NOT NULL,
+    estado INT NOT NULL,
+    size INT NOT NULL,
+    offset INT NOT NULL,
+
+    FOREIGN KEY (rotina_id) REFERENCES rotina(id)
 );

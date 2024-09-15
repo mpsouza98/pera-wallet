@@ -5,6 +5,7 @@ using PeraInvest.API.Clients;
 using PeraInvest.API.Clients.auth;
 using PeraInvest.API.Controllers.ExceptionFilters;
 using PeraInvest.API.Queries;
+using PeraInvest.API.Services;
 using PeraInvest.Domain.CarteiraAggregate.Repository;
 using PeraInvest.Infrastructure;
 using PeraInvest.Infrastructure.Repositories;
@@ -25,6 +26,7 @@ namespace PeraInvest {
             services.AddMemoryCache();
             services.AddDbContext<CarteiraContext>(options => options.UseMySQL(connectionString: connectionString!));
             services.AddDbContext<AtivoFinanceiroContext>(options => options.UseMySQL(connectionString: connectionString!));
+            services.AddDbContext<BatchContext>(options => options.UseMySQL(connectionString: connectionString!));
 
             services.AddSingleton(new ClientCredentialsTokenRequest(
                 url: Configuration["Authentication:GenerateTokenUrl"] ?? throw new NullReferenceException(),
@@ -55,10 +57,12 @@ namespace PeraInvest {
 
             services.AddScoped<IAtivoFinanceiroRepository, AtivoFinanceiroRepository>();
             services.AddScoped<IOperacoesCarteiraQuery, OperacoesCarteiraQuery>();
+            services.AddScoped<IBatchRepository, BatchRepository>();
+            services.AddScoped<ICalculoService, CalculoService>();
+
+            services.AddHostedService<ScheduledJob>();
 
             services.AddAutoMapper(typeof(Startup));
-
-            services.AddHostedService<ScheduledJobService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env) {

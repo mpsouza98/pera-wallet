@@ -1,4 +1,6 @@
-﻿namespace PeraInvest.Domain.CarteiraAggregate.Repository {
+﻿using PeraInvest.Domain.SeedWork;
+
+namespace PeraInvest.Domain.CarteiraAggregate.Repository {
     public interface ICarteiraRepository : IRepository<Carteira> {
 
         OperacaoAtivoCarteira AdicionarAtivo(Carteira carteira, OperacaoAtivoCarteira ativoCarteira);

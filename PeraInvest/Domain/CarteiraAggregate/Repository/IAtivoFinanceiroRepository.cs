@@ -1,4 +1,6 @@
-﻿namespace PeraInvest.Domain.CarteiraAggregate.Repository {
+﻿using PeraInvest.Domain.SeedWork;
+
+namespace PeraInvest.Domain.CarteiraAggregate.Repository {
     public interface IAtivoFinanceiroRepository : IRepository<AtivoFinanceiro> {
 
         AtivoFinanceiro CriarAtivo(AtivoFinanceiro ativoFinanceiro);
@@ -6,6 +8,5 @@
         Task<bool> IsAtivoExistente(string codigo);
         AtivoFinanceiro AtualizarAtivo(AtivoFinanceiro ativoFinanceiro);
         void DeletarAtivo(AtivoFinanceiro ativoFinanceiro);
-
     }
 }
