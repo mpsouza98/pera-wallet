@@ -10,12 +10,10 @@ namespace PeraInvest.API.Batch.Models {
         public Estado EstadoExecucao { get; set; }
         public enum Estado { NAO_INICIADO, EM_ANDAMENTO, FINALIZADO, FINALIZADO_COM_ERRO }
 
-        public Rotina(string id, string nome, DateTime dataInicioProcessamento, DateTime dataFimProcessamento, Estado estadoExecucao) {
+        public Rotina(string id, string nome) {
             Id = id;
             Nome = nome;
-            DataInicioProcessamento = dataInicioProcessamento;
-            DataFimProcessamento = dataFimProcessamento;
-            EstadoExecucao = estadoExecucao;
+            EstadoExecucao = Rotina.Estado.NAO_INICIADO;
         }
     }
 }
