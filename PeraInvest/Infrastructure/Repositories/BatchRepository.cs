@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PeraInvest.API.Batch.Models;
 using PeraInvest.Domain.SeedWork;
-using System.Drawing;
-using System.Security.Policy;
 using static PeraInvest.API.Batch.Models.Rotina;
 
 namespace PeraInvest.Infrastructure.Repositories {

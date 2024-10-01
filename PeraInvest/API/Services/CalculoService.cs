@@ -13,7 +13,7 @@ namespace PeraInvest.API.Services {
         private readonly IBatchRepository batchRepository;
         private readonly IOperacoesCarteiraQuery carteiraQuery;
         private readonly ILogger<CalculoService> logger;
-        private static readonly int TAMANHO_BLOCO = 1000;
+        private static readonly int TAMANHO_BLOCO = 500;
         private static readonly string ROTINA_ID = "8e442a42-748f-11ef-9c76-0242ac120002";
 
         public CalculoService(IBatchRepository batchRepository, IOperacoesCarteiraQuery carteiraQuery, ILogger<CalculoService> logger) {
@@ -25,7 +25,10 @@ namespace PeraInvest.API.Services {
         public async Task ExecutaRotinaCalculoValorizacao() {
             Rotina rotina = await batchRepository.ConsultaRotina(ROTINA_ID);
 
-            if (rotina.DataInicioProcessamento.Date.Equals(DateTime.Today) && rotina.EstadoExecucao == Rotina.Estado.FINALIZADO) return;
+            if (rotina.DataInicioProcessamento.Date.Equals(DateTime.Today) && rotina.EstadoExecucao == Rotina.Estado.FINALIZADO) {
+                logger.LogInformation("Rotina já processada!");
+                return;
+            }
 
             if (rotina.EstadoExecucao == Rotina.Estado.NAO_INICIADO) {
                 rotina.DataInicioProcessamento = DateTime.Now;
@@ -51,31 +54,31 @@ namespace PeraInvest.API.Services {
             await AtualizaRotina(rotina);
         }
 
-        private async Task<List<BlocoProcessamento>> CriaBlocosProcessamento() {
-            int TotalOperacoes = await carteiraQuery.ConsultaTotalOperacoes();
+        private async Task CriaBlocosProcessamento() {
+            int totalOperacoes = await carteiraQuery.ConsultaTotalOperacoes();
             List<BlocoProcessamento> blocos = [];
-            int TamanhoBlocoParcial = TotalOperacoes % TAMANHO_BLOCO;
+            int tamanhoBlocoParcial = totalOperacoes % TAMANHO_BLOCO;
+            int numBlocos = (int) Math.Ceiling((decimal) totalOperacoes / TAMANHO_BLOCO);
             int offsetAtual = 1;
+            int blocoId = 1;
 
-
-            if (TamanhoBlocoParcial > 1) {
+            if (tamanhoBlocoParcial > 1) {
                 BlocoProcessamento blocoParcial = new(
-                    id: 1,
+                    id: blocoId,
                     rotinaId: ROTINA_ID,
                     estado: Rotina.Estado.NAO_INICIADO,
-                    tamanhoBloco: TamanhoBlocoParcial,
+                    tamanhoBloco: tamanhoBlocoParcial,
                     offset: offsetAtual
                 );
                 blocos.Add(blocoParcial);
-                TotalOperacoes -= TamanhoBlocoParcial;
-                offsetAtual = TamanhoBlocoParcial;
+                totalOperacoes -= tamanhoBlocoParcial;
+                offsetAtual = tamanhoBlocoParcial;
+                blocoId++;
             }
 
-            for (int i = 1; i <= TotalOperacoes / TAMANHO_BLOCO; i++) {
-                var blocoId = (i == 1 && blocos.Count == 1) ? i + 1 : i;
-
+            for (int i = blocoId; i <= numBlocos; i++) {
                 BlocoProcessamento bloco = new(
-                    id: blocoId,
+                    id: i,
                     rotinaId: ROTINA_ID,
                     estado: Rotina.Estado.NAO_INICIADO,
                     tamanhoBloco: TAMANHO_BLOCO,
@@ -92,8 +95,6 @@ namespace PeraInvest.API.Services {
             catch (Exception ex) {
                 logger.LogError("Erro ao inserir blocos processamento!");
             }
-
-            return await batchRepository.ConsultaBlocosDisponiveisRotina(ROTINA_ID);
         }
 
         private async Task ProcessaBlocosDisponiveis() {
